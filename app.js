@@ -14,9 +14,22 @@ if (config.device === 'ios') {
   client = new device()
 }
 
+
+const PLATFORM = require('os').platform()
+const ADB_PATH = PLATFORM === 'win32' ?
+        path.join(__dirname, 'lib/win/adb.exe') :
+        PLATFORM === 'darwin' ? path.join(__dirname, 'lib/mac/adb') : ''
+if (!ADB_PATH) {
+  console.log('目前只支持mac和window系统...')
+  process.exit(1)
+}
 const PUBLIC_PATH = path.join(__dirname, 'public')
-const ADB_PATH = path.join(__dirname, 'lib/adb/adb.exe')
 const SCREEN_SHOT_PATH = path.join(PUBLIC_PATH, 'img/screenshot')
+
+let client
+if (config.device === 'ios') {
+  client = new device()
+}
 
 app.use('/', express.static(PUBLIC_PATH))
 
@@ -41,7 +54,11 @@ io.on('connection', function (socket) {
 
 async function handler () {
   try {
+<<<<<<< HEAD
     let screenImage 
+=======
+    let screenImage
+>>>>>>> 665f78b92aeaa709cbb6b1afc5567a771a7f622e
     if (config.device === 'android') {
       screenImage = await getScreenShot()
     } else if (config.device === 'ios') {
@@ -112,7 +129,11 @@ async function toJump (duration) {
 
   if (config.device === 'android') {
     try {
+<<<<<<< HEAD
       await runCmd(`${ADB_PATH} shell input touchscreen swipe 200 200 200 200 ${duration}`)      
+=======
+      await runCmd(`${ADB_PATH} shell input touchscreen swipe 200 200 200 200 ${duration}`)
+>>>>>>> 665f78b92aeaa709cbb6b1afc5567a771a7f622e
       setTimeout(handler, duration + 500)
     } catch (e) {
       io.emit('error', error)
